@@ -20,14 +20,43 @@ document.addEventListener('keydown', (e) => {
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-// --- Play Developer sahifasi (IKKIDAN BIRINI ISHLATING) ---
-// 1) Nom bo‘yicha (ishlaydi, lekin nom o‘zgarsa URL ham o‘zgarishi mumkin):
-const DEV_URL = "https://play.google.com/store/apps/developer?id=Kitoblar+Olami";
-// 2) Barqaror variant: raqamli developer ID (topib shu yerga qo‘ying):
-// const DEV_URL = "https://play.google.com/store/apps/dev?id=YOUR_NUMERIC_ID";
+// --- Play Developer sahifasi URL-lari ---
+// Nom bo‘yicha (ishlaydi, lekin nom o‘zgarsa URL ham o‘zgarishi mumkin)
+const DEV_NAME = "Kitoblar Olami";
+const DEV_URL_BY_NAME = "https://play.google.com/store/apps/developer?id=" + encodeURIComponent(DEV_NAME);
 
-// Navbar dagi "Barcha ilovalar" linkini to‘ldiramiz (agar mavjud bo‘lsa)
-document.getElementById('dev-page')?.setAttribute('href', DEV_URL);
+// Barqaror (tavsiya etiladi): raqamli developer ID bo‘lsa — SHUNINI yozing
+const DEV_URL_NUMERIC = ""; // masalan: "https://play.google.com/store/apps/dev?id=1234567890123456789"
+
+// Fallback (qidiruv) — agar yuqoridagilar ishlamasa
+const DEV_URL_FALLBACK = "https://play.google.com/store/search?q=" + encodeURIComponent(DEV_NAME) + "&c=apps";
+
+// Qaysi URL ishlatiladi?
+const DEV_URL = DEV_URL_NUMERIC || DEV_URL_BY_NAME || DEV_URL_FALLBACK;
+
+// Navbar dagi “Barcha ilovalar” linkini DOM tayyor bo‘lgach ulaymiz
+function wireDeveloperLinks() {
+  const devLink = document.getElementById('dev-page');
+  if (devLink) {
+    devLink.setAttribute('href', DEV_URL);
+    devLink.setAttribute('target', '_blank');
+    devLink.setAttribute('rel', 'noopener');
+
+    // Agar qandaydir sabab bilan href "#" bo‘lib qolsa — kafolat bilan ochamiz
+    devLink.addEventListener('click', (e) => {
+      const href = devLink.getAttribute('href') || "";
+      if (href === "#" || href.trim() === "") {
+        e.preventDefault();
+        window.open(DEV_URL, "_blank", "noopener");
+      }
+    });
+  }
+}
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", wireDeveloperLinks);
+} else {
+  wireDeveloperLinks();
+}
 
 // --- Rasmlar uchun bazaviy yo‘l ---
 const IMG_BASE = "source/picture/";
@@ -49,9 +78,7 @@ const BOOKS = [
   { title: "Do‘st orttirish", id: "com.sadirboyprogrammer.dustorttirish", downloads: "—", cover: "cover_dust.webp" },
   { title: "Savdogarlar ustozi", id: "com.sadirboyprogrammer.savdogar", downloads: "58.8k+", cover: "cover_savdogar.webp" },
   { title: "Ibodati islomiya", id: "com.sadirboyprogrammer.ibodatiislomiya", downloads: "60k+", cover: "cover_ibodat.webp" },
-  { title: "Faqat ahmoqlar 8 soat uhlaydi", id: "com.sadirboyprogrammer.faqatahmoqlargina", downloads: "57k+", cover: "cover_ahmoqlar.webp" },
-  // pastdagilarni keyinchalik qo‘shib borasiz:
-  // { title: "...", id: "...", downloads: "—", cover: "" },
+  { title: "Faqat ahmoqlar 8 soat uhlaydi", id: "com.sadirboyprogrammer.faqatahmoqlargina", downloads: "57k+", cover: "cover_ahmoqlar.webp" }
 ];
 
 // --- Helper: cover yo‘lini yechish ---
