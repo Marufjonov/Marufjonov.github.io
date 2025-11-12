@@ -1,141 +1,248 @@
+/* =============== Kitoblar Olami — style.css =============== */
+/* Bazaviy o'zgaruvchilar */
 :root{
-  --bg: #0b1220;
-  --bg-soft: #0f172a;
-  --brand: #2f7bff;
-  --brand-2:#7db7ff;
-  --text: #e6f0ff;
-  --muted:#b7c7e6;
-  --card:#0d1b33;
-  --success:#10b981;
+  --bg: #0e1525;
+  --bg-alt:#121a2b;
+  --text: #e8eefc;
+  --muted:#a9b3c9;
+  --primary:#6aa1ff;
+  --primary-700:#4e86ea;
+  --card:#151d30;
+  --card-edge:#1b2640;
+  --accent:#70f3bd;
+
+  --radius-xl: 22px;
+  --radius-lg: 18px;
+  --radius: 14px;
+
+  --gap-xl: 28px;
+  --gap: 20px;
+  --gap-sm: 14px;
+
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --ring: 0 0 0 2px rgba(255,255,255,.06);
 }
 
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+/* Bazaviy reset */
+*{box-sizing:border-box}
+html,body{height:100%}
 body{
-  font-family:"Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  margin:0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color:var(--text);
-  background: radial-gradient(1200px 600px at 20% -10%, #113066 0%, transparent 60%),
-              radial-gradient(1200px 600px at 120% 10%, #0e244a 0%, transparent 60%),
-              linear-gradient(180deg, var(--bg) 0%, #0a1529 100%);
-  min-height:100dvh;
-  line-height:1.6;
+  background: radial-gradient(1000px 600px at 50% -200px, #1a2442 0%, var(--bg) 60%) fixed;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
 }
+img{display:block; max-width:100%; height:auto}
+a{color:var(--primary); text-decoration:none}
+a:hover{color:#9bc1ff}
+p{margin:0}
+.section{padding:64px 16px}
+.section--alt{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00))}
+.center{display:flex; justify-content:center; align-items:center}
 
-/* Header */
+/* ---------- Header & Navbar ---------- */
 .header{
   position:sticky; top:0; z-index:50;
   display:flex; align-items:center; justify-content:space-between;
-  padding:14px 20px;
+  padding:14px 16px;
+  background:rgba(12,18,34,.7);
   backdrop-filter: blur(10px);
-  background:rgba(8,17,34,.55);
   border-bottom:1px solid rgba(255,255,255,.06);
 }
-.logo{font-weight:800; letter-spacing:.5px; color:#fff; text-decoration:none}
-.navbar{display:flex; gap:20px; align-items:center}
-.navbar a{color:var(--muted); text-decoration:none; font-weight:600}
-.navbar a:hover{color:#fff}
-.icon-btn{display:none}
+.logo{font-weight:800; letter-spacing:.3px; color:#fff}
+.icon-btn{
+  background:#202a46; color:#dbe6ff; border:0;
+  width:38px; height:38px; border-radius:12px; cursor:pointer;
+  display:grid; place-items:center;
+}
+.icon-btn:hover{background:#273255}
 
-/* Mobile menu */
-@media (max-width: 860px){
-  .icon-btn{display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border:1px solid rgba(255,255,255,.1); border-radius:10px; background:transparent; color:#fff}
+/* Desktop navbar */
+.navbar{
+  display:flex; gap:18px; align-items:center;
+}
+.navbar a{
+  padding:8px 10px; border-radius:10px; color:#e6ecff;
+}
+.navbar a:hover{background:rgba(255,255,255,.06)}
+
+/* Mobile off-canvas */
+#menu-btn{display:none}
+#close-navbar{display:none}
+
+@media (max-width: 900px){
+  #menu-btn{display:inline-grid}
   .navbar{
-    position:fixed; inset:0 0 0 auto; width:min(80vw,360px);
-    background:var(--bg-soft); border-left:1px solid rgba(255,255,255,.08);
-    padding:80px 24px 24px; flex-direction:column; gap:16px;
-    transform:translateX(110%); transition:transform .25s ease;
+    position:fixed; inset:0 0 0 auto; width:min(80%, 320px);
+    background:#0f1628; flex-direction:column; padding:18px;
+    transform:translateX(100%); transition:.25s ease; gap:10px;
+    box-shadow: var(--shadow);
   }
   .navbar.active{transform:translateX(0)}
-  #close-navbar{position:absolute; right:18px; top:18px}
+  #close-navbar{display:inline-grid; align-self:flex-end; margin-bottom:6px}
 }
 
-/* Hero */
-.hero{padding:72px 20px}
-.hero__inner{max-width:980px; margin:0 auto; text-align:center}
-.hero h1{font-size:clamp(28px, 5vw, 46px); line-height:1.2}
-.hero p{color:var(--muted); margin-top:14px}
-.hero__cta{display:flex; gap:12px; justify-content:center; margin-top:22px}
+/* ---------- Hero ---------- */
+.hero{padding:72px 16px 36px}
+.hero__inner{
+  max-width:1000px; margin:0 auto; text-align:center;
+}
+.hero h1{
+  margin:0 0 8px; font-size:clamp(26px, 3.5vw, 40px); font-weight:800;
+}
+.hero p{color:var(--muted); max-width:820px; margin:0 auto}
+.hero__cta{margin-top:20px; display:flex; gap:12px; justify-content:center}
 
-/* Buttons */
+/* ---------- Buttons ---------- */
 .btn{
-  display:inline-flex; align-items:center; justify-content:center;
-  padding:12px 18px; border-radius:12px; text-decoration:none; color:#fff;
-  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); font-weight:600;
+  display:inline-block; padding:10px 16px; border-radius:12px;
+  background:#223154; color:#e8efff; border:1px solid rgba(255,255,255,.08);
+  transition:.2s ease; box-shadow:var(--ring);
 }
-.btn:hover{background:rgba(255,255,255,.12)}
-.btn--primary{background:linear-gradient(180deg, var(--brand), #1d5de6); border-color:#2a6df0}
-.btn--lg{padding:14px 22px; font-size:18px}
+.btn:hover{transform:translateY(-1px); background:#253861}
+.btn--primary{background:var(--primary); color:#081227; border-color:transparent}
+.btn--primary:hover{background:var(--primary-700)}
+.btn--lg{padding:14px 22px; font-weight:600}
 
-/* Section */
-.section{padding:56px 20px}
-.section--alt{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00))}
-.section__head{max-width:920px; margin:0 auto 22px; text-align:center}
-.section__head h2{font-size:clamp(24px,4vw,34px)}
+/* ---------- Sections ---------- */
+.section__head{
+  max-width:1100px; margin:0 auto 22px; text-align:center;
+}
+.section__head h2{
+  margin:0 0 6px; font-size:clamp(22px, 3vw, 34px); font-weight:800;
+  text-transform:none;
+}
 .section__head p{color:var(--muted)}
 
-/* Grid (books) */
+/* ---------- Grid & Cards ---------- */
 .grid{
-  --cols:4;
-  display:grid; gap:16px;
-  grid-template-columns: repeat(var(--cols), minmax(0,1fr));
+  --cols: 4; /* JS orqali ham o‘zgaradi */
   max-width:1100px; margin:0 auto;
-}
-@media (max-width: 980px){ .grid{--cols:2} }
-@media (max-width: 560px){ .grid{--cols:1} }
-
-.card{
-  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-  border:1px solid rgba(255,255,255,.08); border-radius:16px;
-  overflow:hidden; display:flex; gap:14px; padding:14px; align-items:center;
-  transition:transform .15s ease, border-color .15s ease;
-}
-.card:hover{transform:translateY(-2px); border-color:rgba(255,255,255,.18)}
-.card__thumb{
-  width:100px;            /* portret eni */
-  height:150px;           /* portret bo‘yi (3:2 nisbati) */
-  border-radius:14px;
-  flex:0 0 auto;
-  overflow:hidden;
-  background:linear-gradient(180deg, #173b7a, #0e2a57);
   display:grid;
-  place-items:center;
-  color:#fff;
-  font-weight:800;
-  box-shadow:0 2px 6px rgba(0,0,0,0.2);
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: var(--gap);
 }
 
-.card__body{min-width:0}
-.card__title{font-weight:700}
-.card__desc{color:var(--muted); font-size:14px}
-.card__badges{display:flex; gap:6px; margin-top:6px}
+/* card */
+.card{
+  display:flex; gap:12px; align-items:stretch;
+  background:linear-gradient(180deg, var(--card) 0%, #0f1729 100%);
+  border:1px solid var(--card-edge);
+  border-radius: var(--radius-xl);
+  padding:12px;
+  box-shadow: var(--shadow);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  overflow:hidden;
+}
+.card:hover{
+  transform: translateY(-3px);
+  border-color:#2b3b6b;
+  box-shadow: 0 14px 34px rgba(0,0,0,.45);
+}
+
+/* thumb — rasm */
+.card__thumb{
+  flex:0 0 110px;
+  aspect-ratio: 3 / 4;
+  border-radius: 16px;
+  overflow:hidden;
+  background: #0f1a33;
+  display:grid; place-items:center; color:#8fa8d3; font-weight:800; font-size:18px;
+}
+.card__thumb img{width:100%; height:100%; object-fit:cover}
+
+/* body */
+.card__body{display:flex; flex-direction:column; gap:6px; min-width:0}
+.card__title{
+  color:#eaf0ff; font-weight:700; font-size:16px; line-height:1.25;
+  overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+}
+.card__desc{color:#9fb0cf; font-size:13px}
+
+/* badges */
+.card__badges{display:flex; gap:8px; margin-top:auto; flex-wrap:wrap}
 .badge{
-  font-size:11px; letter-spacing:.3px; padding:4px 8px; border-radius:999px;
-  border:1px solid rgba(255,255,255,.12); color:#dfeaff; background:rgba(255,255,255,.04);
+  font-size:12px; padding:4px 8px; border-radius:999px;
+  background:#1e2a48; color:#d7e4ff; border:1px solid rgba(255,255,255,.08);
 }
 
-/* More note */
-.more-note{max-width:920px; margin:22px auto 0; text-align:center; color:var(--muted)}
+/* “Ko‘proq ko‘rsatish” / CTA tugmalari */
+.more{
+  margin-top:18px;
+  display:inline-block;
+  padding:10px 16px;
+  border-radius:12px;
+  background:#1b2747;
+  color:#dfe8ff;
+  border:1px solid rgba(255,255,255,.08);
+}
+.more:hover{background:#21305a}
+.hidden{display:none !important}
 
-/* Contact */
+/* ---------- More note (Play bo‘limi osti) ---------- */
+.more-note{
+  max-width:1100px; margin:18px auto 0; padding:12px 0; color:var(--muted);
+  display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap;
+}
+
+/* ---------- Contact form ---------- */
 .contact{
-  max-width:720px; margin:0 auto; display:grid; gap:12px;
+  max-width:760px; margin:0 auto; display:grid; gap:12px;
 }
 .contact input, .contact textarea{
-  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.10);
-  border-radius:12px; color:#fff; padding:12px 14px; outline:0;
+  width:100%; padding:12px 14px; color:#e9f0ff;
+  background:#121a2b; border:1px solid #233156; border-radius:12px;
+  outline:none; box-shadow: var(--ring);
 }
-.contact textarea{min-height:140px; resize:vertical}
-.contact__note{margin-top:10px; text-align:center; color:var(--muted)}
+.contact textarea{min-height:120px; resize:vertical}
+.contact input:focus, .contact textarea:focus{border-color:#3553a3}
 
-/* Footer */
-.footer{padding:40px 20px; border-top:1px solid rgba(255,255,255,.06)}
+/* ---------- Footer ---------- */
+.footer{padding:36px 16px; background:#0b1120; border-top:1px solid rgba(255,255,255,.06)}
 .footer__grid{
-  max-width:1100px; margin:0 auto 20px;
-  display:grid; grid-template-columns:repeat(3,1fr); gap:18px;
+  max-width:1100px; margin:0 auto; display:grid; gap:18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
-.footer h3{font-size:20px}
-.footer h4{font-size:16px; margin-bottom:6px}
-.list{list-style:none}
-.list a{color:var(--muted); text-decoration:none}
-.list a:hover{color:#fff}
-.fineprint{text-align:center; color:var(--muted)}
+.footer h3{margin:0 0 6px}
+.footer h4{margin:0 0 10px; font-size:14px; color:#c9d7ff}
+.list{list-style:none; margin:0; padding:0; display:grid; gap:6px}
+.list a{color:#cbd7f7}
+.list a:hover{color:#ffffff}
+.fineprint{margin-top:18px; text-align:center; color:#9fb1d3}
+
+/* =============== Responsive =============== */
+
+/* ≤1200 — grid bo‘sh joyga ko‘ra nafas olsin */
+@media (max-width: 1200px){
+  .grid{gap:18px}
+}
+
+/* ≤1024 — planshet */
+@media (max-width: 1024px){
+  .grid{grid-template-columns: repeat(3, 1fr)}        /* 3 ta ustun */
+  .card{border-radius: var(--radius-lg)}
+  .card__thumb{flex-basis:100px}
+}
+
+/* ≤768 — telefonlar */
+@media (max-width: 768px){
+  .section{padding:48px 14px}
+  .hero{padding:56px 14px 28px}
+  .grid{grid-template-columns: repeat(2, 1fr); gap: var(--gap-sm)} /* 2 ta ustun */
+  .card{padding:10px; border-radius:16px}
+  .card__thumb{flex-basis:96px; border-radius:14px}
+  .card__title{font-size:14px}
+  .card__desc{font-size:12px}
+  .badge{font-size:11px; padding:3px 8px}
+  .footer__grid{grid-template-columns:1fr}
+}
+
+/* ≤480 — juda kichik ekranlar */
+@media (max-width: 480px){
+  .grid{grid-template-columns: 1fr; gap: 12px}        /* 1 ta ustun */
+  .card{max-width:92%; margin:0 auto}
+  .hero__cta{flex-direction:column}
+}
