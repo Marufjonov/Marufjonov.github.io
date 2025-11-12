@@ -3,17 +3,33 @@
 // ===============================
 
 // --- Navbar open/close ---
+const body = document.body;
 const navbar = document.querySelector('.navbar');
 const openBtn = document.querySelector('#menu-btn');
 const closeBtn = document.querySelector('#close-navbar');
 
-openBtn?.addEventListener('click', () => navbar.classList.add('active'));
-closeBtn?.addEventListener('click', () => navbar.classList.remove('active'));
+// ochish/yopish
+openBtn?.addEventListener('click', () => {
+  navbar.classList.add('active');
+  body.classList.add('nav-open'); // scrim ko'rsatiladi
+});
+closeBtn?.addEventListener('click', () => {
+  navbar.classList.remove('active');
+  body.classList.remove('nav-open');
+});
+// menyudagi havolaga bosilganda yopish
 navbar?.querySelectorAll('a').forEach(a =>
-  a.addEventListener('click', () => navbar.classList.remove('active'))
+  a.addEventListener('click', () => {
+    navbar.classList.remove('active');
+    body.classList.remove('nav-open');
+  })
 );
+// ESC bilan yopish
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') navbar?.classList.remove('active');
+  if (e.key === 'Escape') {
+    navbar?.classList.remove('active');
+    body.classList.remove('nav-open');
+  }
 });
 
 // --- Dynamic year in footer ---
@@ -234,12 +250,13 @@ const CONTACT_EMAIL = "sadirboyprogrammer@gmail.com";
       }
 
       const subject = encodeURIComponent(`Saytdan murojaat — ${name}`);
-      const body = encodeURIComponent(
-        `Ism: ${name}\nEmail: ${from}\n\nXabar:\n${message}`
-      );
+      const bodyText =
+        `Ism: ${name}\nEmail: ${from}\n\nXabar:\n${message}`;
+      const body = encodeURIComponent(bodyText);
 
       window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
       navbar?.classList.remove('active');
+      body.classList.remove('nav-open');
     });
   }
 })();
