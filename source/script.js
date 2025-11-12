@@ -16,41 +16,42 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') navbar?.classList.remove('active');
 });
 
-// --- Dynamic year in footer (guarded) ---
+// --- Dynamic year in footer ---
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 // --- Play Developer sahifasi URL-lari ---
 // Nom bo‘yicha (ishlaydi, lekin nom o‘zgarsa URL ham o‘zgarishi mumkin)
 const DEV_NAME = "Kitoblar Olami";
-const DEV_URL_BY_NAME = "https://play.google.com/store/apps/developer?id=" + encodeURIComponent(DEV_NAME);
+const DEV_URL_BY_NAME =
+  "https://play.google.com/store/apps/developer?id=" + encodeURIComponent(DEV_NAME);
 
-// Barqaror (tavsiya etiladi): raqamli developer ID bo‘lsa — SHUNINI yozing
+// Barqaror (tavsiya etiladi): raqamli developer ID bor — SHUNINI ishlatamiz
 const DEV_URL_NUMERIC = "https://play.google.com/store/apps/dev?id=5816209838306631094";
 
-// Fallback (qidiruv) — agar yuqoridagilar ishlamasa
-const DEV_URL_FALLBACK = "https://play.google.com/store/search?q=" + encodeURIComponent(DEV_NAME) + "&c=apps";
+// Fallback (qidiruv)
+const DEV_URL_FALLBACK =
+  "https://play.google.com/store/search?q=" + encodeURIComponent(DEV_NAME) + "&c=apps";
 
-// Qaysi URL ishlatiladi?
+// Yakuniy URL
 const DEV_URL = DEV_URL_NUMERIC || DEV_URL_BY_NAME || DEV_URL_FALLBACK;
 
-// Navbar dagi “Barcha ilovalar” linkini DOM tayyor bo‘lgach ulaymiz
+// Hamma dev-havolalarni ulash: id="dev-page" va data-dev-link atributli <a> lar
 function wireDeveloperLinks() {
-  const devLink = document.getElementById('dev-page');
-  if (devLink) {
-    devLink.setAttribute('href', DEV_URL);
-    devLink.setAttribute('target', '_blank');
-    devLink.setAttribute('rel', 'noopener');
+  document.querySelectorAll('#dev-page, [data-dev-link]').forEach((el) => {
+    el.setAttribute('href', DEV_URL);
+    el.setAttribute('target', '_blank');
+    el.setAttribute('rel', 'noopener');
 
-    // Agar qandaydir sabab bilan href "#" bo‘lib qolsa — kafolat bilan ochamiz
-    devLink.addEventListener('click', (e) => {
-      const href = devLink.getAttribute('href') || "";
-      if (href === "#" || href.trim() === "") {
+    // Agar href "#" bo‘lsa ham ochib yuborish
+    el.addEventListener('click', (e) => {
+      const href = el.getAttribute('href') || "";
+      if (href === "#" || !href.trim()) {
         e.preventDefault();
         window.open(DEV_URL, "_blank", "noopener");
       }
     });
-  }
+  });
 }
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", wireDeveloperLinks);
@@ -183,7 +184,7 @@ if (grid) {
   grid.innerHTML = '';
   renderBatch(INITIAL_COUNT);
 
-  // “Ko‘proq ko‘rsatish” tugmasi (agar hali yo‘q bo‘lsa yaratamiz)
+  // “Ko‘proq ko‘rsatish” tugmasi
   if (!document.getElementById('more-btn') && BOOKS.length > INITIAL_COUNT){
     const moreBtn = document.createElement('button');
     moreBtn.id = 'more-btn';
@@ -194,7 +195,7 @@ if (grid) {
     grid.insertAdjacentElement('afterend', moreBtn);
   }
 
-  // Developer CTA tugmasi — griddan keyin qo‘shamiz
+  // Developer CTA tugmasi — griddan keyin
   const devCta = document.createElement('a');
   devCta.className = 'more';
   devCta.href = DEV_URL;
@@ -206,11 +207,11 @@ if (grid) {
   grid.insertAdjacentElement('afterend', devCta);
 }
 
-// --- Kontakt (EMAIL) — faqat shu bo‘lim qo‘shildi ---
+// --- Kontakt (EMAIL) ---
 const CONTACT_EMAIL = "sadirboyprogrammer@gmail.com";
 
 (function setupContact(){
-  // pastdagi “Bizning email” havolasini to‘ldiramiz
+  // pastdagi “Bizning email” havolasini to‘ldirish
   const emailEl = document.getElementById('contact-email');
   if (emailEl) {
     emailEl.setAttribute('href', `mailto:${CONTACT_EMAIL}`);
@@ -238,8 +239,6 @@ const CONTACT_EMAIL = "sadirboyprogrammer@gmail.com";
       );
 
       window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
-
-      // menyuni yopamiz
       navbar?.classList.remove('active');
     });
   }
