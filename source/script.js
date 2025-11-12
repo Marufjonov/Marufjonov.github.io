@@ -43,7 +43,7 @@ const BOOKS = [
   { title: "Hayot yutqazgan joyingdan boshlanar", id: "com.sadirboyprogrammer.hayotyutqazganjoyingdan", downloads: "91k+", cover: "cover_hayot.webp" },
   { title: "To’siqlarga qaramay sevdik", id: "com.sadirboyprogrammer.tusiqlargaqaramaysevdik", downloads: "86.5k+", cover: "" },
   { title: "O’zingga xush kelding", id: "com.sadirboyprogrammer.uzinggaxushkelding", downloads: "79k+", cover: "" },
-  { title: "Payg'ambarlar tarixi", id: "com.sadirboyprogrammer.paygambarlartarixi", downloads: "71.8k+", cover: "" },
+  { title: "Dunyoning Ishlari", id: "com.sadirboyprogrammer.dunyoningishlari", downloads: "—", cover: "" },
   { title: "Ikki eshik orasi", id: "com.sadirboyprogrammer.ikkieshikorasi", downloads: "69.5k+", cover: "" },
   { title: "Kaktuslar ham gullaydi", id: "com.sadirboyprogrammer.kaktuslarhamgullaydi", downloads: "53k+", cover: "" },
   { title: "Pul topish sirlari", id: "com.sadirboyprogrammer.pultopishsirlari", downloads: "62.3k+", cover: "" },
