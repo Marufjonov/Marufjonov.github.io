@@ -76,14 +76,16 @@
       <p>Taklif va hamkorlik uchun bizga yozing.</p>
     </div>
 
-    <form id="contact-form" class="contact" action="mailto:khalilovibrohimuz@gmail.com" method="post" enctype="text/plain">
+    <!-- ⬇️ mailto/action olib tashlandi, JS to‘ldiradi -->
+    <form id="contact-form" class="contact">
       <input type="text" name="name" placeholder="Ismingiz" required />
       <input type="email" name="email" placeholder="Email" required />
       <textarea name="message" placeholder="Xabar" required></textarea>
       <button type="submit" class="btn btn--primary">Jo‘natish</button>
     </form>
 
-    <p class="contact__note">Bizning email: <a href="mailto:khalilovibrohimuz@gmail.com">khalilovibrohimuz@gmail.com</a></p>
+    <!-- ⬇️ Dinamik email: JS #contact-email ni to‘ldiradi -->
+    <p class="contact__note">Bizning email: <a id="contact-email" href="#">[email]</a></p>
   </section>
 
   <!-- Footer -->
