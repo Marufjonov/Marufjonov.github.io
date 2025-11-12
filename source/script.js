@@ -20,12 +20,21 @@ document.addEventListener('keydown', (e) => {
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+// --- Play Developer sahifasi (IKKIDAN BIRINI ISHLATING) ---
+// 1) Nom bo‘yicha (ishlaydi, lekin nom o‘zgarsa URL ham o‘zgarishi mumkin):
+const DEV_URL = "https://play.google.com/store/apps/developer?id=Kitoblar+Olami";
+// 2) Barqaror variant: raqamli developer ID (topib shu yerga qo‘ying):
+// const DEV_URL = "https://play.google.com/store/apps/dev?id=YOUR_NUMERIC_ID";
+
+// Navbar dagi "Barcha ilovalar" linkini to‘ldiramiz (agar mavjud bo‘lsa)
+document.getElementById('dev-page')?.setAttribute('href', DEV_URL);
+
 // --- Rasmlar uchun bazaviy yo‘l ---
 const IMG_BASE = "source/picture/";
 
 // --- Books data (faqat shu massivni tahrir qiling) ---
 // title: karta nomi
-// id: Play Market package name
+// id: Play Market package name (paket nomi)
 // downloads: badge matn, masalan "121k+"
 // cover: fayl nomi (faqat nomi) yoki to‘liq URL; bo‘sh bo‘lsa fallback harf-ikon chiqadi
 const BOOKS = [
@@ -40,21 +49,22 @@ const BOOKS = [
   { title: "Pul topish sirlari", id: "com.sadirboyprogrammer.pultopishsirlari", downloads: "62.3k+", cover: "" },
   { title: "Savdogarlar ustozi", id: "com.sadirboyprogrammer.savdogar", downloads: "58.8k+", cover: "" },
   { title: "Ibodati islomiya", id: "com.sadirboyprogrammer.ibodatiislomiya", downloads: "60k+", cover: "" },
-  { title: "Faqat ahmoqlar 8 soat uhlaydi", id: "com.sadirboyprogrammer.faqatahmoqlargina", downloads: "57k+", cover: "" }
-
+  { title: "Faqat ahmoqlar 8 soat uhlaydi", id: "com.sadirboyprogrammer.faqatahmoqlargina", downloads: "57k+", cover: "" },
+  // pastdagilarni keyinchalik qo‘shib borasiz:
+  // { title: "...", id: "...", downloads: "—", cover: "" },
 ];
 
 // --- Helper: cover yo‘lini yechish ---
 function resolveCoverPath(cover) {
   if (!cover) return null;
-  if (/^https?:\/\//i.test(cover)) return cover;       // to‘liq URL bo‘lsa — shuni ishlatamiz
-  return IMG_BASE + cover;                              // faqat nom bo‘lsa — papkaga qo‘shamiz
+  if (/^https?:\/\//i.test(cover)) return cover; // to‘liq URL bo‘lsa
+  return IMG_BASE + cover;                       // faqat nom bo‘lsa — papkaga qo‘shamiz
 }
 
 // --- Render books grid ---
 const grid = document.getElementById('books-grid');
 
-// ✅ 4 ta ustunni majburan o‘rnatamiz (CSS’da 3 bo‘lsa ham)
+// 4 ta ustun (agar CSS’da boshqacha bo‘lsa ham majburlab qo‘yamiz)
 if (grid) grid.style.setProperty('--cols', '4');
 
 function createCard(b) {
@@ -74,8 +84,7 @@ function createCard(b) {
   const coverUrl = resolveCoverPath(b.cover);
   if (coverUrl) {
     const img = document.createElement('img');
-    // cache-busting (GitHub Pages kechikkan cache’ni yangilash uchun)
-    img.src = `${coverUrl}?v=${Date.now()}`;
+    img.src = `${coverUrl}?v=${Date.now()}`; // cache-busting
     img.alt = b.title;
     img.loading = 'lazy';
     img.style.width = '100%';
@@ -129,8 +138,45 @@ function createCard(b) {
   return a;
 }
 
+// --- Progressive render: 12 ta → “Ko‘proq ko‘rsatish” bilan davom ---
+const INITIAL_COUNT = 12;  // birinchi ko‘rinish
+const BATCH = 10;          // keyingi yuklanish
+let rendered = 0;
+
+function renderBatch(n){
+  BOOKS.slice(rendered, rendered + n).forEach(b => grid.appendChild(createCard(b)));
+  rendered += n;
+  if (rendered >= BOOKS.length) {
+    document.getElementById('more-btn')?.classList.add('hidden');
+  }
+}
+
+// grid tayyorlangach, tugmalarni yaratamiz
 if (grid) {
-  BOOKS.forEach(b => grid.appendChild(createCard(b)));
+  grid.innerHTML = '';
+  renderBatch(INITIAL_COUNT);
+
+  // “Ko‘proq ko‘rsatish” tugmasi (agar hali yo‘q bo‘lsa yaratamiz)
+  if (!document.getElementById('more-btn') && BOOKS.length > INITIAL_COUNT){
+    const moreBtn = document.createElement('button');
+    moreBtn.id = 'more-btn';
+    moreBtn.className = 'more';
+    moreBtn.type = 'button';
+    moreBtn.textContent = 'Ko‘proq ko‘rsatish';
+    moreBtn.addEventListener('click', () => renderBatch(BATCH));
+    grid.insertAdjacentElement('afterend', moreBtn);
+  }
+
+  // Developer CTA tugmasi — griddan keyin qo‘shamiz
+  const devCta = document.createElement('a');
+  devCta.className = 'more';
+  devCta.href = DEV_URL;
+  devCta.target = '_blank';
+  devCta.rel = 'noopener';
+  devCta.style.display = 'inline-block';
+  devCta.style.marginLeft = '12px';
+  devCta.textContent = 'Barcha ilovalar (Play)';
+  grid.insertAdjacentElement('afterend', devCta);
 }
 
 // --- Kontakt form (faqat menyuni yopish) ---
