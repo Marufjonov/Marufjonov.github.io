@@ -1,128 +1,119 @@
-let navbar = document.querySelector('.header .navbar')
+// --- Navbar open/close ---
+const navbar = document.querySelector('.navbar');
+const openBtn = document.querySelector('#menu-btn');
+const closeBtn = document.querySelector('#close-navbar');
 
-document.querySelector('#menu-btn').onclick = () =>{
-  navbar.classList.add('active');
-}
+openBtn?.addEventListener('click', () => navbar.classList.add('active'));
+closeBtn?.addEventListener('click', () => navbar.classList.remove('active'));
+navbar?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navbar.classList.remove('active')));
 
-document.querySelector('#close-navbar').onclick = () => {
-  navbar.classList.remove('active');
-};
+// --- Dynamic year in footer ---
+document.getElementById('year').textContent = new Date().getFullYear();
 
-document.querySelectorAll('.navbar a').forEach(link => {
-  link.onclick = () => {
-    navbar.classList.remove('active');
-  };
-});
+// --- Books data (EDIT ONLY THIS ARRAY) ---
+// title: karta sarlavhasi
+// id: Play Market packageName (kartaga bosilganda shu ilovaga olib boradi)
+// tag: kichik belgi/yozuv
+// cover: ixtiyoriy lokal rasm (agar qo‘ymasangiz harfli gradient chiqariladi)
+const BOOKS = [
+  {
+    title: "Savdogarlar Ustozi (1–2)",
+    id: "com.sadirboyprogrammer.savdogar",
+    tag: "Uzbek (Lotin/Kiril)",
+    cover: "" // masalan: "source/picture/savdogar.webp"
+  },
+  {
+    title: "Ruhlantiruvchi Hikoyalar 2024",
+    id: "com.sadirboyprogrammer.ruhlantiruvchihikoyalar2020",
+    tag: "Motivatsion",
+    cover: ""
+  },
+  {
+    title: "Iblis Hamlasi — 1",
+    id: "com.sadirboyprogrammer.iblisxamlasi1",
+    tag: "Sarguzasht",
+    cover: ""
+  },
+  {
+    title: "Duo Taqdirni O‘zgartiradi",
+    id: "com.sadirboyprogrammer.duoyoqutqaradi", // agar boshqacha bo‘lsa almashtiring
+    tag: "Diniy/Ilhom",
+    cover: ""
+  },
+  {
+    title: "Hayot Yutqazgan Joy...",
+    id: "com.sadirboyprogrammer.hayotyutqazganjoy", // o‘zingizning paket nomingiz bilan
+    tag: "Psixologiya",
+    cover: ""
+  },
+  {
+    title: "Kitoblar To‘plami (Super-App)",
+    id: "com.sadirboyprogrammer.booknew", // super-app bo‘lsa
+    tag: "Multi-til / Xatcho‘p",
+    cover: ""
+  }
+];
 
-// Kursor elementi
+// --- Render books grid ---
+const grid = document.getElementById('books-grid');
 
-const cursor = document.querySelector('.cursor');
-const cursorInner = document.querySelector('.cursor__inner');
-const filter = document.querySelector('#filter-1 feTurbulence');
-let mouseX = 0;
-let mouseY = 0;
-let cursorX = 0;
-let cursorY = 0;
+function createCard(b) {
+  const a = document.createElement('a');
+  a.className = 'card';
+  a.href = `https://play.google.com/store/apps/details?id=${encodeURIComponent(b.id)}`;
+  a.target = '_blank';
+  a.rel = 'noopener';
 
-document.addEventListener('mousemove', event => {
-  mouseX = event.clientX - cursor.getBoundingClientRect().width / 4.6;
-  mouseY = event.clientY - cursor.getBoundingClientRect().height / 4.6;
-  if (brightness > 128) {
-    cursorInner.style.stroke = 'blue';
+  const thumb = document.createElement('div');
+  thumb.className = 'card__thumb';
+  if (b.cover) {
+    const img = document.createElement('img');
+    img.src = b.cover;
+    img.alt = b.title;
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'cover';
+    img.loading = 'lazy';
+    thumb.textContent = '';
+    thumb.appendChild(img);
   } else {
-    cursorInner.style.stroke = 'white';
-  }
-});
-
-document.addEventListener('mousedown', () => {
-  filter.setAttribute("type", "fractalNoise");
-  filter.setAttribute("baseFrequency", "0.02 0.15");
-  filter.setAttribute("numOctaves", "3");
-  filter.setAttribute("result", "warp");
-});
-
-document.addEventListener('mouseup', () => {
-  filter.setAttribute("type", "fractalNoise");
-  filter.setAttribute("baseFrequency", "0.02 0.15");
-  filter.setAttribute("numOctaves", "3");
-  filter.setAttribute("result", "warp");
-});
-
-const links = document.querySelectorAll('a');
-
-links.forEach(link => {
-  link.addEventListener('mouseenter', () => {
-    filter.setAttribute("type", "fractalNoise");
-    filter.setAttribute("baseFrequency", "0.02 0.15");
-    filter.setAttribute("numOctaves", "3");
-    filter.setAttribute("result", "warp");
-  });
-
-  link.addEventListener('mouseleave', () => {
-    filter.setAttribute("type", "fractalNoise");
-    filter.setAttribute("baseFrequency", "0.02 0.15");
-    filter.setAttribute("numOctaves", "3");
-    filter.setAttribute("result", "warp");
-  });
-});
-
-function getBrightness(x, y) {
-  const imageData = ctx.getImageData(x, y, 1, 1).data;
-  // return (imageData[0] + imageData[1] + imageData[2]) / 3;
-  return 0;
-}
-
-function animate() {
-  cursorX += (mouseX - cursorX) * 0.2;
-  cursorY += (mouseY - cursorY) * 0.2;
-
-  cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
-
-  requestAnimationFrame(animate);
-}
-
-animate();
-
-
-// kursor elementining oxiri
-
-const form = document.querySelector('#contact-form');
-
-form.addEventListener('submit', event => {
-  event.preventDefault();
-
-  // EmailJS kodini ishlatish uchun EmailJS ma'lumotlarini tekshirish
-  if (typeof emailjs === 'undefined') {
-    alert('Kechirasiz ushbu xizmat vaqtinchalik mavjud emas');
-    return;
+    // Fallback — birinchi harflar
+    thumb.textContent = b.title.split(/\s+/).slice(0,2).map(s=>s[0] ?? '').join('').toUpperCase();
   }
 
-  // EmailJS kodini ishlatish uchun EmailJS ma'lumotlarini kiritish
-  emailjs.init('YOUR_USER_ID');
+  const body = document.createElement('div');
+  body.className = 'card__body';
 
-  // Email ma'lumotlarini to'plab, EmailJS xizmatiga yuborish
-  emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
-    from_name: form.elements[0].value,
-    from_email: form.elements[1].value,
-    message: form.elements[2].value,
-    to_email: 'khalilovibrohimuz@gmail.com'
-  }).then(response => {
-    console.log('Email yuborildi!', response.status, response.text);
-  }, error => {
-    console.log('Email yuborilmadi!', error);
-  });
-});
+  const h = document.createElement('div');
+  h.className = 'card__title';
+  h.textContent = b.title;
 
+  const d = document.createElement('div');
+  d.className = 'card__desc';
+  d.textContent = "Play Market’dagi ilova sahifasi";
 
-var swiper = new Swiper(".swiper-container", {
-  loop: false,
-  pagination: {
-    el: ".swiper-pagination",
-    clickable: true,
-  },
-  autoplay: {
-    delay: 2400,
-    disableOnInteraction: false
-  },
-  slidesPerView: 3,
+  const badges = document.createElement('div');
+  badges.className = 'card__badges';
+  const badge1 = document.createElement('span');
+  badge1.className = 'badge';
+  badge1.textContent = b.tag || 'Kitob ilovasi';
+  badges.appendChild(badge1);
+
+  body.appendChild(h);
+  body.appendChild(d);
+  body.appendChild(badges);
+
+  a.appendChild(thumb);
+  a.appendChild(body);
+  return a;
+}
+
+if (grid) {
+  BOOKS.forEach(b => grid.appendChild(createCard(b)));
+}
+
+// --- Simple mailto fallback (mobile email client) ---
+document.querySelector('#contact-form')?.addEventListener('submit', (e) => {
+  // form action="mailto:" bilan ishlaydi; bu yerda faqat menyuni yopamiz
+  navbar?.classList.remove('active');
 });
