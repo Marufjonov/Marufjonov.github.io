@@ -1,3 +1,7 @@
+// ===============================
+// Kitoblar Olami — script.js
+// ===============================
+
 // --- Navbar open/close ---
 const navbar = document.querySelector('.navbar');
 const openBtn = document.querySelector('#menu-btn');
@@ -5,27 +9,33 @@ const closeBtn = document.querySelector('#close-navbar');
 
 openBtn?.addEventListener('click', () => navbar.classList.add('active'));
 closeBtn?.addEventListener('click', () => navbar.classList.remove('active'));
-navbar?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navbar.classList.remove('active')));
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') navbar?.classList.remove('active'); });
+navbar?.querySelectorAll('a').forEach(a =>
+  a.addEventListener('click', () => navbar.classList.remove('active'))
+);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') navbar?.classList.remove('active');
+});
 
 // --- Dynamic year in footer (guarded) ---
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-// --- Books data (EDIT ONLY THIS ARRAY) ---
+// --- Rasmlar uchun bazaviy yo‘l ---
+const IMG_BASE = "source/picture/";
+
+// --- Books data (faqat shu massivni tahrir qiling) ---
 // title: karta nomi
 // id: Play Market package name
-// downloads: ko‘rsatish uchun badge (matn), masalan "121k+"
-// cover: rasm yo‘li (ixtiyoriy) — bo‘lmasa harf-ikon chiqadi
+// downloads: badge matn, masalan "121k+"
+// cover: fayl nomi (faqat nomi) yoki to‘liq URL; bo‘sh bo‘lsa fallback harf-ikon chiqadi
 const BOOKS = [
-  { title: "Duo taqdirni o’zgartiradi", id: "com.sadirboyprogrammer.duotaqdirniuzgartiradi", downloads: "121k+", cover: "source/picture/cover_duo.webp"},
+  { title: "Duo taqdirni o’zgartiradi", id: "com.sadirboyprogrammer.duotaqdirniuzgartiradi", downloads: "121k+", cover: "cover_duo.webp" },
   { title: "Mavlono rumiy hikmatlari", id: "com.sadirboyprogrammer.mavlonorumiyhikmatlari", downloads: "107k+", cover: "" },
   { title: "Hayot yutqazgan joyingdan boshlanar", id: "com.sadirboyprogrammer.hayotyutqazganjoyingdan", downloads: "91k+", cover: "" },
   { title: "To’siqlarga qaramay sevdik", id: "com.sadirboyprogrammer.tusiqlargaqaramaysevdik", downloads: "86.5k+", cover: "" },
   { title: "O’zingga xush kelding", id: "com.sadirboyprogrammer.uzinggaxushkelding", downloads: "79k+", cover: "" },
   { title: "Payg'ambarlar tarixi", id: "com.sadirboyprogrammer.paygambarlartarixi", downloads: "71.8k+", cover: "" },
   { title: "Ikki eshik orasi", id: "com.sadirboyprogrammer.ikkieshikorasi", downloads: "69.5k+", cover: "" },
-  // "Deyl karneti yoqimtoy" ni "Do'st orttirish" (Dale Carnegie) app’iga bog‘ladim:
   { title: "Deyl Karneti — Yoqimtoy bo‘lish siri", id: "com.sadirboyprogrammer.dustorttirish", downloads: "67k+", cover: "" },
   { title: "Pul topish sirlari", id: "com.sadirboyprogrammer.pultopishsirlari", downloads: "62.3k+", cover: "" },
   { title: "Ruhlantiruvchi hikoyalar", id: "com.sadirboyprogrammer.ruhlantiruvchihikoyalar2020", downloads: "61k+", cover: "" },
@@ -42,17 +52,23 @@ const BOOKS = [
   { title: "Afv et Allohim", id: "com.sadirboyprogrammer.avfetallohim", downloads: "—", cover: "" }
 ];
 
+// --- Helper: cover yo‘lini yechish ---
+function resolveCoverPath(cover) {
+  if (!cover) return null;
+  if (/^https?:\/\//i.test(cover)) return cover;       // to‘liq URL bo‘lsa — shuni ishlatamiz
+  return IMG_BASE + cover;                              // faqat nom bo‘lsa — papkaga qo‘shamiz
+}
+
 // --- Render books grid ---
 const grid = document.getElementById('books-grid');
 
 // ✅ 4 ta ustunni majburan o‘rnatamiz (CSS’da 3 bo‘lsa ham)
-if (grid) {
-  grid.style.setProperty('--cols', '4');
-}
+if (grid) grid.style.setProperty('--cols', '4');
 
 function createCard(b) {
   const a = document.createElement('a');
   a.className = 'card';
+
   // UTM referrer + package
   const ref = 'utm_source=site&utm_medium=card&utm_campaign=top_grid';
   a.href = `https://play.google.com/store/apps/details?id=${encodeURIComponent(b.id)}&referrer=${encodeURIComponent(ref)}`;
@@ -63,15 +79,21 @@ function createCard(b) {
   const thumb = document.createElement('div');
   thumb.className = 'card__thumb';
 
-  if (b.cover) {
+  const coverUrl = resolveCoverPath(b.cover);
+  if (coverUrl) {
     const img = document.createElement('img');
-    img.src = b.cover;
+    // cache-busting (GitHub Pages kechikkan cache’ni yangilash uchun)
+    img.src = `${coverUrl}?v=${Date.now()}`;
     img.alt = b.title;
+    img.loading = 'lazy';
     img.style.width = '100%';
     img.style.height = '100%';
     img.style.objectFit = 'cover';
-    img.loading = 'lazy';
-    thumb.textContent = '';
+    img.onerror = () => {
+      // 404/yuklanmasa fallback — birinchi harflar
+      thumb.textContent = b.title.split(/\s+/).slice(0, 2).map(s => s[0] ?? '').join('').toUpperCase();
+      img.remove();
+    };
     thumb.appendChild(img);
   } else {
     // Fallback — birinchi harflar
@@ -119,7 +141,7 @@ if (grid) {
   BOOKS.forEach(b => grid.appendChild(createCard(b)));
 }
 
-// --- Simple mailto fallback (mobile email client) ---
+// --- Kontakt form (faqat menyuni yopish) ---
 document.querySelector('#contact-form')?.addEventListener('submit', () => {
   navbar?.classList.remove('active');
 });
