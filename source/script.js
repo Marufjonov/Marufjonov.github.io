@@ -26,7 +26,7 @@ const DEV_NAME = "Kitoblar Olami";
 const DEV_URL_BY_NAME = "https://play.google.com/store/apps/developer?id=" + encodeURIComponent(DEV_NAME);
 
 // Barqaror (tavsiya etiladi): raqamli developer ID bo‘lsa — SHUNINI yozing
-const DEV_URL_NUMERIC = ""; // masalan: "https://play.google.com/store/apps/dev?id=1234567890123456789"
+const DEV_URL_NUMERIC = "https://play.google.com/store/apps/dev?id=5816209838306631094";
 
 // Fallback (qidiruv) — agar yuqoridagilar ishlamasa
 const DEV_URL_FALLBACK = "https://play.google.com/store/search?q=" + encodeURIComponent(DEV_NAME) + "&c=apps";
