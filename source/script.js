@@ -18,7 +18,7 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 // downloads: ko‘rsatish uchun badge (matn), masalan "121k+"
 // cover: rasm yo‘li (ixtiyoriy) — bo‘lmasa harf-ikon chiqadi
 const BOOKS = [
-  { title: "Duo taqdirni o’zgartiradi", id: "com.sadirboyprogrammer.duotaqdirniuzgartiradi", downloads: "121k+", cover: "source/picture/cover_duo.webp" },
+  { title: "Duo taqdirni o’zgartiradi", id: "com.sadirboyprogrammer.duotaqdirniuzgartiradi", downloads: "121k+", cover: "source/picture/cover_duo.webp"},
   { title: "Mavlono rumiy hikmatlari", id: "com.sadirboyprogrammer.mavlonorumiyhikmatlari", downloads: "107k+", cover: "" },
   { title: "Hayot yutqazgan joyingdan boshlanar", id: "com.sadirboyprogrammer.hayotyutqazganjoyingdan", downloads: "91k+", cover: "" },
   { title: "To’siqlarga qaramay sevdik", id: "com.sadirboyprogrammer.tusiqlargaqaramaysevdik", downloads: "86.5k+", cover: "" },
