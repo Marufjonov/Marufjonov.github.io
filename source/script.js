@@ -85,17 +85,20 @@ const IMG_BASE = "source/picture/";
 // cover: fayl nomi (faqat nomi) yoki to‘liq URL; bo‘sh bo‘lsa fallback harf-ikon chiqadi
 const BOOKS = [
   { title: "Duo taqdirni o’zgartiradi", id: "com.sadirboyprogrammer.duotaqdirniuzgartiradi", downloads: "121k+", cover: "cover_duo.webp" },
-  { title: "Chunki Sen Allohsan", id: "com.sadirboyprogrammer.chunkisen", downloads: "—", cover: "cover_chunkisen.webp" },
   { title: "Hayot yutqazgan joyingdan boshlanar", id: "com.sadirboyprogrammer.hayotyutqazganjoyingdan", downloads: "91k+", cover: "cover_hayot.webp" },
   { title: "To’siqlarga qaramay sevdik", id: "com.sadirboyprogrammer.tusiqlargaqaramaysevdik", downloads: "86.5k+", cover: "cover_sevdik.webp" },
   { title: "O’zingga xush kelding", id: "com.sadirboyprogrammer.uzinggaxushkelding", downloads: "79k+", cover: "cover_kelding.webp" },
-  { title: "Dunyoning Ishlari", id: "com.sadirboyprogrammer.dunyoningishlari", downloads: "—", cover: "cover_dunyo.webp" },
+  { title: "Faqat ahmoqlar 8 soat uhlaydi", id: "com.sadirboyprogrammer.faqatahmoqlargina", downloads: "57k+", cover: "cover_ahmoqlar.webp" },
   { title: "Ikki eshik orasi", id: "com.sadirboyprogrammer.ikkieshikorasi", downloads: "69.5k+", cover: "cover_eshik.webp" },
   { title: "Kaktuslar ham gullaydi", id: "com.sadirboyprogrammer.kaktuslarhamgullaydi", downloads: "53k+", cover: "cover_kaktus.webp" },
-  { title: "Do‘st orttirish", id: "com.sadirboyprogrammer.dustorttirish", downloads: "—", cover: "cover_dust.webp" },
   { title: "Savdogarlar ustozi", id: "com.sadirboyprogrammer.savdogar", downloads: "58.8k+", cover: "cover_savdogar.webp" },
   { title: "Ibodati islomiya", id: "com.sadirboyprogrammer.ibodatiislomiya", downloads: "60k+", cover: "cover_ibodat.webp" },
-  { title: "Faqat ahmoqlar 8 soat uhlaydi", id: "com.sadirboyprogrammer.faqatahmoqlargina", downloads: "57k+", cover: "cover_ahmoqlar.webp" }
+  { title: "Chunki Sen Allohsan", id: "com.sadirboyprogrammer.chunkisen", downloads: "—", cover: "cover_chunkisen.webp" },
+  { title: "Dunyoning Ishlari", id: "com.sadirboyprogrammer.dunyoningishlari", downloads: "—", cover: "cover_dunyo.webp" },
+  { title: "Do‘st orttirish", id: "com.sadirboyprogrammer.dustorttirish", downloads: "—", cover: "cover_dust.webp" }
+
+
+
 ];
 
 // --- Helper: cover yo‘lini yechish ---
