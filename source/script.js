@@ -206,7 +206,41 @@ if (grid) {
   grid.insertAdjacentElement('afterend', devCta);
 }
 
-// --- Kontakt form (faqat menyuni yopish) ---
-document.querySelector('#contact-form')?.addEventListener('submit', () => {
-  navbar?.classList.remove('active');
-});
+// --- Kontakt (EMAIL) — faqat shu bo‘lim qo‘shildi ---
+const CONTACT_EMAIL = "sadirboyprogrammer@gmail.com";
+
+(function setupContact(){
+  // pastdagi “Bizning email” havolasini to‘ldiramiz
+  const emailEl = document.getElementById('contact-email');
+  if (emailEl) {
+    emailEl.setAttribute('href', `mailto:${CONTACT_EMAIL}`);
+    emailEl.textContent = CONTACT_EMAIL;
+  }
+
+  // form submit — mailto ochish va menyuni yopish
+  const form = document.getElementById('contact-form');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = (form.elements['name']?.value || '').trim() || 'Anonim';
+      const from = (form.elements['email']?.value || '').trim();
+      const message = (form.elements['message']?.value || '').trim();
+
+      if (!message) {
+        alert("Iltimos, xabaringizni yozing.");
+        return;
+      }
+
+      const subject = encodeURIComponent(`Saytdan murojaat — ${name}`);
+      const body = encodeURIComponent(
+        `Ism: ${name}\nEmail: ${from}\n\nXabar:\n${message}`
+      );
+
+      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+
+      // menyuni yopamiz
+      navbar?.classList.remove('active');
+    });
+  }
+})();
