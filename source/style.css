@@ -116,6 +116,7 @@ body::after{
   transition: opacity .25s ease;
   z-index: 60; /* header(70) va navbar(100) bilan mos */
 }
+body.nav-open{ overflow:hidden; }            /* scroll-lock */
 body.nav-open::after{ opacity: 1; pointer-events: auto; }
 
 img{display:block; max-width:100%; height:auto}
@@ -160,12 +161,14 @@ p{margin:0}
   #menu-btn{display:inline-grid}
   .navbar{
     position:fixed; inset:0 0 0 auto; width:min(80%, 320px);
-    background: var(--bg-alt);
+    height:100vh;                        /* to'liq balandlik */
+    background: var(--bg-alt);           /* qattiq fon */
     flex-direction:column; padding:18px;
     transform:translateX(100%); transition:.25s ease; gap:10px;
     box-shadow: var(--shadow);
     z-index: 100; /* scrim ustida turadi */
     border-left: 1px solid var(--divider);
+    overflow-y:auto;
   }
   .navbar.active{transform:translateX(0)}
   #close-navbar{display:inline-grid; align-self:flex-end; margin-bottom:6px}
