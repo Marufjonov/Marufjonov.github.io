@@ -11,12 +11,13 @@ const closeBtn = document.querySelector('#close-navbar');
 // ochish/yopish
 openBtn?.addEventListener('click', () => {
   navbar.classList.add('active');
-  body.classList.add('nav-open'); // scrim ko'rsatiladi
+  body.classList.add('nav-open'); // scrim ko'rsatiladi + scroll-lock
 });
 closeBtn?.addEventListener('click', () => {
   navbar.classList.remove('active');
   body.classList.remove('nav-open');
 });
+
 // menyudagi havolaga bosilganda yopish
 navbar?.querySelectorAll('a').forEach(a =>
   a.addEventListener('click', () => {
@@ -24,9 +25,21 @@ navbar?.querySelectorAll('a').forEach(a =>
     body.classList.remove('nav-open');
   })
 );
+
 // ESC bilan yopish
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
+    navbar?.classList.remove('active');
+    body.classList.remove('nav-open');
+  }
+});
+
+// Scrim/tashqi zona ustiga bosilganda yopish
+document.addEventListener('click', (e) => {
+  if (!body.classList.contains('nav-open')) return;
+  const insideNav = e.target.closest('.navbar');
+  const onMenuBtn = e.target.closest('#menu-btn');
+  if (!insideNav && !onMenuBtn) {
     navbar?.classList.remove('active');
     body.classList.remove('nav-open');
   }
@@ -96,9 +109,6 @@ const BOOKS = [
   { title: "Chunki Sen Allohsan", id: "com.sadirboyprogrammer.chunkisen", downloads: "—", cover: "cover_chunkisen.webp" },
   { title: "Dunyoning Ishlari", id: "com.sadirboyprogrammer.dunyoningishlari", downloads: "—", cover: "cover_dunyo.webp" },
   { title: "Do‘st orttirish", id: "com.sadirboyprogrammer.dustorttirish", downloads: "—", cover: "cover_dust.webp" }
-
-
-
 ];
 
 // --- Helper: cover yo‘lini yechish ---
@@ -149,8 +159,8 @@ function createCard(b) {
   }
 
   // Body
-  const body = document.createElement('div');
-  body.className = 'card__body';
+  const cardBody = document.createElement('div'); // <-- nomi o'zgardi (body bilan to'qnashmaydi)
+  cardBody.className = 'card__body';
 
   const h = document.createElement('div');
   h.className = 'card__title';
@@ -176,12 +186,12 @@ function createCard(b) {
     badges.appendChild(badge2);
   }
 
-  body.appendChild(h);
-  body.appendChild(d);
-  body.appendChild(badges);
+  cardBody.appendChild(h);
+  cardBody.appendChild(d);
+  cardBody.appendChild(badges);
 
   a.appendChild(thumb);
-  a.appendChild(body);
+  a.appendChild(cardBody);
   return a;
 }
 
@@ -255,9 +265,9 @@ const CONTACT_EMAIL = "sadirboyprogrammer@gmail.com";
       const subject = encodeURIComponent(`Saytdan murojaat — ${name}`);
       const bodyText =
         `Ism: ${name}\nEmail: ${from}\n\nXabar:\n${message}`;
-      const body = encodeURIComponent(bodyText);
+      const bodyParam = encodeURIComponent(bodyText);
 
-      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${bodyParam}`;
       navbar?.classList.remove('active');
       body.classList.remove('nav-open');
     });
